@@ -10,7 +10,21 @@ pipeline{
          stage("Maven Build"){
             steps{
               sh "mvn clean package"
+              sh "mvn target/*.war target/mywebserver.war"
             }
         }
+         stage("Deploy-dev"){
+         sshagent(['TOMCAT_CREDENTIALS']) {
+               sh """
+                  scp -o StrictHostKeyChecking=no target/mywebserver.war ubuntu@54.173.187.231:/opt/tomcat8/webapps/
+                  
+                  ssh ubuntu@54.173.187.231 /opt/tomcat8/bin/shutdown.sh
+                  
+                   ssh ubuntu@54.173.187.231 /opt/tomcat8/bin/startup.sh
+               
+               """
+            }
+         
+         }
     }
 }

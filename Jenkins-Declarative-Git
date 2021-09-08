@@ -10,7 +10,7 @@ pipeline{
          stage("Maven Build"){
             steps{
               sh "mvn clean package"
-              sh "mv target/*.war target/mywebserver.war"
+              sh "mv target/mahaLogin-3.0.war target/mywebserver.war"
             }
         }
          stage("Deploy-dev"){
